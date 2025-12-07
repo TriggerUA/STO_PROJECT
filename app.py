@@ -1,17 +1,24 @@
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 from models import db, User, Car, Order
 from werkzeug.security import generate_password_hash, check_password_hash
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = "replace-with-strong-secret"
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:1987_QAZwsxEDC_1987@localhost/sto_test"
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "fallback-secret")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST")
+DB_NAME = os.getenv("DB_NAME")
+app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
 db.init_app(app)
+
 with app.app_context():
     db.create_all()
 
-# --- Helpers ---
 def current_user():
     if "username" in session:
         return User.query.filter_by(username=session["username"]).first()
@@ -20,26 +27,20 @@ def current_user():
 def login_required():
     return "username" in session
 
-# --- Routes ---
 @app.route("/")
 def home():
     return redirect(url_for("login"))
 
-# ----------------- Login & Register -----------------
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    msg = None
     if request.method == "POST":
         username = request.form["username"].strip()
         password = request.form["password"]
         user = User.query.filter_by(username=username).first()
         if not user:
-            # ask to register
             return render_template("login.html", ask_register=True, username=username)
         if not check_password_hash(user.password, password):
-            msg = "Невірний пароль"
-            return render_template("login.html", message=msg)
-        # success
+            return render_template("login.html", error="Невірний пароль")
         session["username"] = user.username
         session["role"] = user.role
         return redirect(url_for("dashboard"))
@@ -66,7 +67,6 @@ def logout():
     session.clear()
     return redirect(url_for("login"))
 
-# ----------------- Dashboard -----------------
 @app.route("/dashboard")
 def dashboard():
     if not login_required():
@@ -78,7 +78,6 @@ def dashboard():
         return render_template("dashboard_mechanic.html", user=user)
     return render_template("dashboard_client.html", user=user)
 
-# ----------------- Cars -----------------
 @app.route("/cars")
 def cars():
     if not login_required():
@@ -120,7 +119,6 @@ def car_delete(car_id):
         db.session.commit()
     return redirect(url_for("cars"))
 
-# ----------------- Orders -----------------
 @app.route("/orders")
 def orders():
     if not login_required():
@@ -130,7 +128,7 @@ def orders():
         orders = Order.query.order_by(Order.id.desc()).all()
     elif user.role == "mechanic":
         orders = Order.query.filter_by(assigned_mechanic_id=user.id).all()
-    else:  # client
+    else:
         orders = Order.query.join(Car).filter(Car.owner_id == user.id).all()
     return render_template("orders.html", orders=orders)
 
@@ -189,7 +187,6 @@ def order_delete(order_id):
         db.session.commit()
     return redirect(url_for("orders"))
 
-# ----------------- Mechanics -----------------
 @app.route("/mechanics")
 def mechanics():
     if not login_required() or session.get("role") != "admin":
