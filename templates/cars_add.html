@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Додати авто{% endblock %}
+{% block content %}
+<h2>Додати авто</h2>
+{% if message %}<p class="danger">{{ message }}</p>{% endif %}
+<form method="post">
+  <label>Модель:</label><br><input name="model" required><br><br>
+  <label>Номер (plate):</label><br><input name="plate" required><br><br>
+  <label>Власник (username):</label><br>
+  <select name="owner">
+    {% for u in users %}
+      <option value="{{ u.username }}">{{ u.username }} ({{ u.role }})</option>
+    {% endfor %}
+  </select><br><br>
+  <button type="submit">Додати</button>
+</form>
+{% endblock %}

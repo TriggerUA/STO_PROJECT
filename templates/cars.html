@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Авто{% endblock %}
+{% block content %}
+<h2>Автомобілі</h2>
+{% if session.role == 'admin' %}
+  <p><a href="{{ url_for('car_add') }}">Додати авто</a></p>
+{% endif %}
+<table border="1" cellpadding="6">
+  <tr><th>ID</th><th>Модель</th><th>Номер</th><th>Власник</th>{% if session.role=='admin' %}<th>Дії</th>{% endif %}</tr>
+  {% for c in cars %}
+    <tr>
+      <td>{{ c.id }}</td>
+      <td>{{ c.model }}</td>
+      <td>{{ c.plate }}</td>
+      <td>{{ c.owner.username }}</td>
+      {% if session.role=='admin' %}
+        <td><a href="{{ url_for('car_delete', car_id=c.id) }}" class="danger">Видалити</a></td>
+      {% endif %}
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}

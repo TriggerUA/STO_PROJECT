@@ -1,0 +1,28 @@
+DROP DATABASE IF EXISTS sto_test;
+CREATE DATABASE sto_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE sto_test;
+
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(80) NOT NULL UNIQUE,
+  password VARCHAR(200) NOT NULL,
+  role VARCHAR(20) NOT NULL DEFAULT 'client'
+);
+
+CREATE TABLE cars (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  model VARCHAR(120) NOT NULL,
+  plate VARCHAR(30) NOT NULL,
+  owner_id INT NOT NULL,
+  FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE orders (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  car_id INT NOT NULL,
+  service_description VARCHAR(500) NOT NULL,
+  price DECIMAL(10,2) NULL,
+  status VARCHAR(30) NOT NULL DEFAULT 'new',
+  mechanic_notes VARCHAR(500) NULL,
+  FOREIGN KEY (car_id) REFERENCES cars(id) ON DELETE CASCADE
+);

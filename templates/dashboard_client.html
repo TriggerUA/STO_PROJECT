@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Client{% endblock %}
+{% block content %}
+<h2>Панель клієнта</h2>
+<p><a href="{{ url_for('cars') }}">Мої авто</a> | <a href="{{ url_for('orders') }}">Мої замовлення</a></p>
+{% endblock %}

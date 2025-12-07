@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}СТО{% endblock %}</title>
+  <style>
+    body{font-family:Arial;margin:20px;} nav a{margin-right:10px;}
+    .container{max-width:900px;margin:auto;}
+    .danger{color:red;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      {% if session.username %}
+        <strong>{{ session.username }} ({{ session.role }})</strong> |
+        <a href="{{ url_for('dashboard') }}">Dashboard</a> |
+        <a href="{{ url_for('cars') }}">Авто</a> |
+        <a href="{{ url_for('orders') }}">Замовлення</a> |
+        <a href="{{ url_for('logout') }}">Вийти</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Увійти</a>
+      {% endif %}
+    </nav>
+    <hr>
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

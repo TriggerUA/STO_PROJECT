@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Вхід / Реєстрація{% endblock %}
+{% block content %}
+<h2>Вхід</h2>
+{% if message %}<p class="danger">{{ message }}</p>{% endif %}
+
+{% if ask_register %}
+  <p>Користувача "{{ username }}" не знайдено. Зареєструвати?</p>
+  <form method="post" action="{{ url_for('register') }}">
+    <input type="hidden" name="username" value="{{ username }}">
+    <label>Пароль (новий):</label><br>
+    <input type="password" name="password" required><br><br>
+    <label>Роль (admin/mechanic/client) — тільки для тестів:</label><br>
+    <input type="text" name="role" value="client"><br><br>
+    <button type="submit">Зареєструвати</button>
+  </form>
+  <p><a href="{{ url_for('login') }}">⬅ Назад</a></p>
+{% else %}
+  <form method="post" action="{{ url_for('login') }}">
+    <label>Логін:</label><br>
+    <input type="text" name="username" required><br><br>
+    <label>Пароль:</label><br>
+    <input type="password" name="password" required><br><br>
+    <button type="submit">Увійти</button>
+  </form>
+  <p>Якщо користувача не існує — буде запропоновано створити.</p>
+{% endif %}
+{% endblock %}

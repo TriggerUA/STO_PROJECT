@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Оновити замовлення{% endblock %}
+{% block content %}
+<h2>Оновити замовлення #{{ order.id }}</h2>
+<form method="post">
+  <label>Статус:</label><br>
+  <select name="status">
+    <option value="new" {% if order.status=='new' %}selected{% endif %}>new</option>
+    <option value="in_progress" {% if order.status=='in_progress' %}selected{% endif %}>in_progress</option>
+    <option value="done" {% if order.status=='done' %}selected{% endif %}>done</option>
+  </select><br><br>
+  <label>Нотатки механіка:</label><br>
+  <textarea name="mechanic_notes">{{ order.mechanic_notes or '' }}</textarea><br><br>
+  <label>Ціна:</label><br>
+  <input name="price" type="number" step="0.01" value="{{ order.price or '' }}"><br><br>
+  <button type="submit">Зберегти</button>
+</form>
+{% endblock %}

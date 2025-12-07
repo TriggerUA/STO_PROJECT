@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Доступ заборонено{% endblock %}
+{% block content %}
+<h2 class="danger">❌ У вас немає прав</h2>
+<p><a href="{{ url_for('dashboard') }}">Повернутись</a></p>
+{% endblock %}

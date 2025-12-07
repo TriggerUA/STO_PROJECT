@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Замовлення{% endblock %}
+{% block content %}
+<h2>Замовлення</h2>
+{% if session.role == 'admin' %}
+  <p><a href="{{ url_for('order_add') }}">Створити замовлення</a></p>
+{% endif %}
+<table border="1" cellpadding="6">
+  <tr><th>ID</th><th>Авто</th><th>Опис</th><th>Ціна</th><th>Статус</th><th>Нотатки</th><th>Дії</th></tr>
+  {% for o in orders %}
+    <tr>
+      <td>{{ o.id }}</td>
+      <td>{{ o.car.plate }} ({{ o.car.model }})</td>
+      <td>{{ o.service_description }}</td>
+      <td>{{ o.price or '' }}</td>
+      <td>{{ o.status }}</td>
+      <td>{{ o.mechanic_notes or '' }}</td>
+      <td>
+        {% if session.role in ['admin','mechanic'] %}
+          <a href="{{ url_for('order_update', order_id=o.id) }}">Оновити</a>
+        {% endif %}
+        {% if session.role == 'admin' %}
+          | <a href="{{ url_for('order_delete', order_id=o.id) }}" class="danger">Видалити</a>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+{% endblock %}
