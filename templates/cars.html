@@ -1,22 +1,35 @@
 {% extends "base.html" %}
-{% block title %}Авто{% endblock %}
 {% block content %}
 <h2>Автомобілі</h2>
-{% if session.role == 'admin' %}
-  <p><a href="{{ url_for('car_add') }}">Додати авто</a></p>
+{% if session.get('role') == 'admin' %}
+<a href="{{ url_for('car_add') }}" class="btn btn-success mb-3">Додати автомобіль</a>
 {% endif %}
-<table border="1" cellpadding="6">
-  <tr><th>ID</th><th>Модель</th><th>Номер</th><th>Власник</th>{% if session.role=='admin' %}<th>Дії</th>{% endif %}</tr>
-  {% for c in cars %}
-    <tr>
-      <td>{{ c.id }}</td>
-      <td>{{ c.model }}</td>
-      <td>{{ c.plate }}</td>
-      <td>{{ c.owner.username }}</td>
-      {% if session.role=='admin' %}
-        <td><a href="{{ url_for('car_delete', car_id=c.id) }}" class="danger">Видалити</a></td>
-      {% endif %}
-    </tr>
-  {% endfor %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Модель</th>
+            <th>Номер</th>
+            <th>Власник</th>
+            {% if session.get('role') == 'admin' %}
+            <th>Дії</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for car in cars %}
+        <tr>
+            <td>{{ car.id }}</td>
+            <td>{{ car.model }}</td>
+            <td>{{ car.plate }}</td>
+            <td>{{ car.owner.username }}</td>
+            {% if session.get('role') == 'admin' %}
+            <td>
+                <a href="{{ url_for('car_delete', car_id=car.id) }}" class="btn btn-danger btn-sm">Видалити</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
 {% endblock %}

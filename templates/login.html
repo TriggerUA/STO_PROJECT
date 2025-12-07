@@ -1,28 +1,45 @@
 {% extends "base.html" %}
-{% block title %}Вхід / Реєстрація{% endblock %}
 {% block content %}
-<h2>Вхід</h2>
-{% if message %}<p class="danger">{{ message }}</p>{% endif %}
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title mb-3 text-center">Авторизація</h3>
 
-{% if ask_register %}
-  <p>Користувача "{{ username }}" не знайдено. Зареєструвати?</p>
-  <form method="post" action="{{ url_for('register') }}">
-    <input type="hidden" name="username" value="{{ username }}">
-    <label>Пароль (новий):</label><br>
-    <input type="password" name="password" required><br><br>
-    <label>Роль (admin/mechanic/client) — тільки для тестів:</label><br>
-    <input type="text" name="role" value="client"><br><br>
-    <button type="submit">Зареєструвати</button>
-  </form>
-  <p><a href="{{ url_for('login') }}">⬅ Назад</a></p>
-{% else %}
-  <form method="post" action="{{ url_for('login') }}">
-    <label>Логін:</label><br>
-    <input type="text" name="username" required><br><br>
-    <label>Пароль:</label><br>
-    <input type="password" name="password" required><br><br>
-    <button type="submit">Увійти</button>
-  </form>
-  <p>Якщо користувача не існує — буде запропоновано створити.</p>
-{% endif %}
+                {% if message %}
+                <div class="alert alert-danger">{{ message }}</div>
+                {% endif %}
+
+                {% if ask_register %}
+                <div class="alert alert-warning text-center">
+                    Користувач "{{ username }}" не знайдений.
+                </div>
+                <form method="POST" action="{{ url_for('register') }}">
+                    <input type="hidden" name="username" value="{{ username }}">
+                    <div class="mb-3">
+                        <label class="form-label">Пароль для нового акаунту</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <input type="hidden" name="role" value="client">
+                    <button type="submit" class="btn btn-success w-100">Зареєструвати</button>
+                </form>
+                <hr>
+                {% endif %}
+
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div class="mb-3">
+                        <label class="form-label">Логін</label>
+                        <input type="text" class="form-control" name="username" value="{{ username if username else '' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Пароль</label>
+                        <input type="password" class="form-control" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Увійти</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

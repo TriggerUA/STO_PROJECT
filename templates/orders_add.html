@@ -1,18 +1,32 @@
 {% extends "base.html" %}
-{% block title %}Додати замовлення{% endblock %}
 {% block content %}
-<h2>Створити замовлення</h2>
-<form method="post">
-  <label>Авто:</label><br>
-  <select name="car_id">
-    {% for c in cars %}
-      <option value="{{ c.id }}">{{ c.plate }} — {{ c.model }} ({{ c.owner.username }})</option>
-    {% endfor %}
-  </select><br><br>
-  <label>Опис послуги:</label><br>
-  <textarea name="service_description" required></textarea><br><br>
-  <label>Ціна (опціонально):</label><br>
-  <input name="price" type="number" step="0.01"><br><br>
-  <button type="submit">Створити</button>
+<h2>Додати замовлення</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label class="form-label">Автомобіль</label>
+        <select class="form-select" name="car_id" required>
+            {% for car in cars %}
+            <option value="{{ car.id }}">{{ car.model }} ({{ car.plate }})</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Опис послуги</label>
+        <textarea name="service_description" class="form-control" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Ціна</label>
+        <input type="number" step="0.01" name="price" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Призначити механіка</label>
+        <select class="form-select" name="assigned_mechanic_id">
+            <option value="">Не призначено</option>
+            {% for mech in mechanics %}
+            <option value="{{ mech.id }}">{{ mech.username }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Додати</button>
 </form>
 {% endblock %}

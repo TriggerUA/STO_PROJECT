@@ -1,29 +1,51 @@
 <!doctype html>
 <html lang="uk">
 <head>
-  <meta charset="utf-8">
-  <title>{% block title %}СТО{% endblock %}</title>
-  <style>
-    body{font-family:Arial;margin:20px;} nav a{margin-right:10px;}
-    .container{max-width:900px;margin:auto;}
-    .danger{color:red;}
-  </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title if title else "STO System" }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding-top: 70px; }
+        .navbar-brand { font-weight: bold; }
+        footer { text-align: center; padding: 15px; margin-top: 50px; color: #777; }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <nav>
-      {% if session.username %}
-        <strong>{{ session.username }} ({{ session.role }})</strong> |
-        <a href="{{ url_for('dashboard') }}">Dashboard</a> |
-        <a href="{{ url_for('cars') }}">Авто</a> |
-        <a href="{{ url_for('orders') }}">Замовлення</a> |
-        <a href="{{ url_for('logout') }}">Вийти</a>
-      {% else %}
-        <a href="{{ url_for('login') }}">Увійти</a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url_for('dashboard') }}">STO</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        {% if session.get('username') %}
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}">Головна</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('cars') }}">Автомобілі</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('orders') }}">Замовлення</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Вийти</a></li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</nav>
+
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert alert-info mt-3">
+          {{ messages[0] }}
+        </div>
       {% endif %}
-    </nav>
-    <hr>
+    {% endwith %}
     {% block content %}{% endblock %}
-  </div>
+</div>
+
+<footer>
+    <p>STO System © 2025</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

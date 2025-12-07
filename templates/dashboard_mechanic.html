@@ -1,6 +1,24 @@
 {% extends "base.html" %}
-{% block title %}Dashboard - Mechanic{% endblock %}
 {% block content %}
 <h2>Панель механіка</h2>
-<p><a href="{{ url_for('orders') }}">Перегляд та оновлення замовлень</a></p>
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Автомобілі</h5>
+                <p class="card-text">Керування усіма автомобілями</p>
+                <a href="{{ url_for('cars') }}" class="btn btn-light">Переглянути</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Замовлення</h5>
+                <p class="card-text">Керування замовленнями</p>
+                <a href="{{ url_for('orders') }}" class="btn btn-light">Переглянути</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

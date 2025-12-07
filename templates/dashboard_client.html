@@ -1,6 +1,22 @@
 {% extends "base.html" %}
-{% block title %}Dashboard - Client{% endblock %}
 {% block content %}
-<h2>Панель клієнта</h2>
-<p><a href="{{ url_for('cars') }}">Мої авто</a> | <a href="{{ url_for('orders') }}">Мої замовлення</a></p>
+<h2>Панель користувача</h2>
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Автомобілі</h5>
+                <a href="{{ url_for('cars') }}" class="btn btn-light">Переглянути</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Замовлення</h5>
+                <a href="{{ url_for('orders') }}" class="btn btn-light">Переглянути</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
